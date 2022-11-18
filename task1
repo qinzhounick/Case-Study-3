@@ -1,0 +1,57 @@
+load("lightField.mat")
+rays_in = [0,-pi*0.05,0,0;
+           0,-pi*0.03,0,0;
+           0,-pi*0.01,0,0;
+           0,pi*0.01,0,0;
+           0,pi*0.03,0,0;
+           0,pi*0.05,0,0;].';
+
+rays_in1 = [0.01,-pi*0.05,0,0;
+           0.01,-pi*0.03,0,0;
+           0.01,-pi*0.01,0,0;
+           0.01,pi*0.01,0,0;
+           0.01,pi*0.03,0,0;
+           0.01,pi*0.05,0,0;].';
+d = 5;
+M = [1 d 0 0;
+     0 1 0 0;
+     0 0 1 d;
+     0 0 0 1];
+
+rays_out = M*rays_in;
+rays_out1 = M*rays_in1;
+
+ray_z = [zeros(1,size(rays_in,2)); d*ones(1,size(rays_in,2))];
+ray_z1 = [zeros(1,size(rays_in1,2)); d*ones(1,size(rays_in1,2))];
+figure(1)
+plot(ray_z, [rays_in(1,:); rays_out(1,:)]);
+hold on
+plot(ray_z1, [rays_in1(1,:); rays_out1(1,:)]);
+hold off
+
+rays_x = rays(1,:);
+rays_y = rays(3,:);
+%1.3 Q2 a
+[img,x,y] = rays2img(rays_x,rays_y, 0.05, 200);
+figure(2)
+colormap("gray");
+imagesc(img);
+%we saw a black img with a white small circle in the center 
+%surrounded by shade area
+
+[img,x,y] = rays2img(rays_x,rays_y, 0.02, 500);
+figure(3)
+colormap("gray");
+imagesc(img);
+%the width changed the focus and the Npixels changed the contrast
+
+rays_new = M*rays;
+rays_x1 = rays_new(1,:);
+rays_y1 = rays_new(3,:);
+[img1,x,y] = rays2img(rays_x1,rays_y1, 0.02, 500);
+figure(4)
+colormap("gray");
+imagesc(img1);
+%d>0 made it sharp to some extend
+
+%3: In the propgration, the angles dont change so the rays travel linearly
